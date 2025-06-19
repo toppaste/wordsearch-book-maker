@@ -1,0 +1,13 @@
+{
+    "puzzles": [
+        {
+            "title": "European Countries",
+            "words": ["Germany", "France", "Italy", "Spain", "Poland", "Netherlands", "Belgium", "Sweden", "Austria", "Switzerland", "Norway", "Denmark", "Finland", "Greece", "Hungary"],
+            "size": 16
+        },
+        {
+            "title": "North American Countries",
+            "words": ["Canada", "Mexico", "Belize", "Honduras", "Guatemala", "Nicaragua", "Panama", "Jamaica", "Barbados", "Grenada", "Dominica", "Haiti", "Cuba", "Bahamas", "Trinidad"]
+        }
+    ]
+}

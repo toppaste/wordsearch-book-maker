@@ -4,7 +4,10 @@ A Python project for generating word search books.
 
 ## Features
 
-- [ ] List your features here
+- [x] Generate word search puzzle from list of words
+- [ ] Save to doc or pdf file
+- [ ] Print collection in a book
+- ...
 
 ## Installation
 
@@ -16,13 +19,14 @@ pip install -r requirements.txt
 
 ## Usage
 
-Describe how to use the project here.
+See scripts in `script` folder as example of usage.
 
 ## Project Structure
 
 ```
-src/wordsearch/      # Main package code
-tests/               # Unit tests
-docs/                # Documentation
-scripts/             # Helper scripts
+data/               # Input reference files
+src/wordsearch/     # Main package code
+tests/              # Unit tests
+docs/               # Documentation
+scripts/            # Helper scripts
 ```
