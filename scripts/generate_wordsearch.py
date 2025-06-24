@@ -65,5 +65,10 @@ if __name__ == "__main__":
                 size = item["size"]
 
         generate.generate_puzzle(
-            item["title"], item["words"], size, args.basic, verbose=True
+            item["title"],
+            item["words"],
+            size,
+            args.basic,
+            export_docx=True,
+            verbose=True,
         )

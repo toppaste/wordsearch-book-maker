@@ -5,7 +5,8 @@ A Python project for generating word search books.
 ## Features
 
 - [x] Generate word search puzzle from list of words
-- [ ] Save to doc or pdf file
+- [x] Save puzzle to docx
+- [ ] Improve formatting and add saving to pdf
 - [ ] Print collection in a book
 - ...
 
@@ -19,14 +20,32 @@ pip install -r requirements.txt
 
 ## Usage
 
-See scripts in `script` folder as example of usage.
+See scripts in the `scripts` folder as examples of usage.
+
+**Important:**  
+When running scripts directly, use the `-m` flag from the project root to ensure imports work correctly. For example:
+
+```bash
+python -m src.wordsearch.generate
+```
+
+```bash
+python -m scripts.generate_wordsearch -h
+```
+
+To generate a wordsearch from a JSON file:
+
+```bash
+python -m scripts.generate_wordsearch input.json
+```
 
 ## Project Structure
 
-```
+```text
 data/               # Input reference files
 src/wordsearch/     # Main package code
 tests/              # Unit tests
 docs/               # Documentation
 scripts/            # Helper scripts
+out/                # Output files (ignored by git)
 ```

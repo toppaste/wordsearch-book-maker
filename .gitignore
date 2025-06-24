@@ -23,6 +23,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 
+# Output folder
+out/
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
