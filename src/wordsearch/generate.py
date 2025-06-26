@@ -3,8 +3,6 @@ import os
 import random
 import string
 
-from .export_docx import save_wordsearch_to_docx
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -138,17 +136,6 @@ class WordSearch(object):
             print(f"\t{solution}")
         return
 
-    def create_docx(self):
-        upper_words = list(map(lambda x: x.upper().replace(" ", ""), self.words))
-        # [TO DO]: "out" folder works only if run from the root of the project
-        # [TO DO]: update out path to be configurable, default to "out"
-        out_dir = "out"
-        os.makedirs(out_dir, exist_ok=True)
-        filename = os.path.join(out_dir, f"{self.title.lower()}.docx")
-        save_wordsearch_to_docx(self.grid, upper_words, filename)
-        return
-
-
 def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False):
     wordsearch = WordSearch(title, words, size, basic)
     try:
@@ -161,10 +148,6 @@ def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False)
     if verbose:
         wordsearch.show_grid()
         wordsearch.show_solution()
-
-    if export_docx:
-        wordsearch.create_docx()
-        logging.info(f"Word search puzzle '{title}' exported to {title.lower()}.docx")
 
     return wordsearch
 
@@ -184,4 +167,4 @@ if __name__ == "__main__":
     size = 12
     basic = True
 
-    generate_puzzle(title, words, size, basic, export_docx=True, verbose=True)
+    generate_puzzle(title, words, size, basic, verbose=True)

@@ -10,7 +10,9 @@ sys.path.insert(
 )
 
 from wordsearch import generate
+from wordsearch import docx_export
 
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -64,11 +66,22 @@ if __name__ == "__main__":
             if "size" in item:
                 size = item["size"]
 
-        generate.generate_puzzle(
+        puzzle = generate.generate_puzzle(
             item["title"],
             item["words"],
             size,
             args.basic,
-            export_docx=True,
             verbose=True,
         )
+        # Save DOCX with grid and solution
+        output_docx = f"{item['title'].lower().replace(' ', '_')}_wordsearch.docx"
+        if args.output:
+            output_docx = os.path.join(args.output, output_docx)
+            # Assuming generate_puzzle returns a WordSearch object with .grid, .words, and .solution attributes
+            docx_export.save_wordsearch_to_docx(
+                output_docx,
+                item["title"],
+                puzzle.grid,
+                puzzle.words,
+                puzzle.solution
+            )
