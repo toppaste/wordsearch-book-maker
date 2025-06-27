@@ -2,6 +2,7 @@ import logging
 import os
 import random
 import string
+from enum import Enum, auto
 
 logging.basicConfig(
     level=logging.INFO,
@@ -10,31 +11,42 @@ logging.basicConfig(
 )
 
 
+class Direction(Enum):
+    HORIZONTAL_LEFT_TO_RIGHT = auto()
+    HORIZONTAL_RIGHT_TO_LEFT = auto()
+    VERTICAL_UP_TO_DOWN = auto()
+    VERTICAL_DOWN_TO_UP = auto()
+    DIAGONAL_UP_LEFT_TO_DOWN_RIGHT = auto()
+    DIAGONAL_DOWN_RIGHT_TO_UP_LEFT = auto()
+    DIAGONAL_UP_RIGHT_TO_DOWN_LEFT = auto()
+    DIAGONAL_DOWN_LEFT_TO_UP_RIGHT = auto()
+    UNKNOWN = auto()
+
 def parse_solution_entry(word, pos_str):
     row, col, dr, dc = map(int, pos_str.split(","))
-    # Infer direction as a string
+    # Map direction
     if dr == 0 and dc == 1:
-        direction = "horizontal"
+        direction = Direction.HORIZONTAL_LEFT_TO_RIGHT
     elif dr == 0 and dc == -1:
-        direction = "horizontal_rev"
+        direction = Direction.HORIZONTAL_RIGHT_TO_LEFT
     elif dr == 1 and dc == 0:
-        direction = "vertical"
+        direction = Direction.VERTICAL_UP_TO_DOWN
     elif dr == -1 and dc == 0:
-        direction = "vertical_rev"
+        direction = Direction.VERTICAL_DOWN_TO_UP
     elif dr == 1 and dc == 1:
-        direction = "diagonal_down"
-    elif dr == -1 and dc == 1:
-        direction = "diagonal_up"
-    elif dr == 1 and dc == -1:
-        direction = "diagonal_down_rev"
+        direction = Direction.DIAGONAL_UP_LEFT_TO_DOWN_RIGHT
     elif dr == -1 and dc == -1:
-        direction = "diagonal_up_rev"
+        direction = Direction.DIAGONAL_DOWN_RIGHT_TO_UP_LEFT
+    elif dr == 1 and dc == -1:
+        direction = Direction.DIAGONAL_UP_RIGHT_TO_DOWN_LEFT
+    elif dr == -1 and dc == 1:
+        direction = Direction.DIAGONAL_DOWN_LEFT_TO_UP_RIGHT
     else:
-        direction = "unknown"
+        direction = Direction.UNKNOWN
     return {
         "word": word,
         "start": (row, col),
-        "direction": direction,
+        "direction": direction.name.lower(),
         "length": len(word),
     }
 
@@ -161,8 +173,13 @@ class WordSearch(object):
 
     def show_solution(self):
         print("\nSolution:")
-        for solution in self.solution:
-            print(f"\t{solution}")
+        highlights = self.get_highlights()
+        for entry in highlights:
+            word = entry["word"]
+            start = entry["start"]
+            direction = entry["direction"]
+            length = entry["length"]
+            print(f"\tWord: {word}, Start: {start}, Direction: {direction}, Length: {length}")
         return
 
     def get_highlights(self):

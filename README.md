@@ -6,7 +6,9 @@ A Python project for generating word search books.
 
 - [x] Generate word search puzzle from list of words
 - [x] Save puzzle to docx
-- [ ] Improve formatting and add saving to pdf
+- [x] Save puzzle to pdf
+- [ ] Improve formatting of main page
+- [ ] Improve formatting of solution page
 - [ ] Print collection in a book
 - ...
 

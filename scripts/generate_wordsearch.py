@@ -13,9 +13,6 @@ from wordsearch import generate
 from wordsearch import docx_export
 from wordsearch import pdf_render
 
-docx = False
-pdf = True
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -35,6 +32,16 @@ if __name__ == "__main__":
         "--basic",
         action="store_true",
         help="only basic directions: left to right, top to bottom, diagonal from top left to bottom right",
+    )
+    parser.add_argument(
+        "--pdf",
+        action="store_true",
+        help="generate PDF output"
+    )
+    parser.add_argument(
+        "--docx",
+        action="store_true",
+        help="generate DOCX output"
     )
     args = parser.parse_args()
 
@@ -69,7 +76,7 @@ if __name__ == "__main__":
 
         if args.output:
 
-            if docx:
+            if args.docx:
                 # Save DOCX with grid and solution
                 output_docx = (
                     f"{item['title'].lower().replace(' ', '_')}_wordsearch.docx"
@@ -83,7 +90,7 @@ if __name__ == "__main__":
                     puzzle.solution,
                 )
 
-            if pdf:
+            if args.pdf:
                 # Get highlights for the solution
                 highlights = puzzle.get_highlights()
 
