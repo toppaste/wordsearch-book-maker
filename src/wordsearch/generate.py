@@ -10,6 +10,35 @@ logging.basicConfig(
 )
 
 
+def parse_solution_entry(word, pos_str):
+    row, col, dr, dc = map(int, pos_str.split(","))
+    # Infer direction as a string
+    if dr == 0 and dc == 1:
+        direction = "horizontal"
+    elif dr == 0 and dc == -1:
+        direction = "horizontal_rev"
+    elif dr == 1 and dc == 0:
+        direction = "vertical"
+    elif dr == -1 and dc == 0:
+        direction = "vertical_rev"
+    elif dr == 1 and dc == 1:
+        direction = "diagonal_down"
+    elif dr == -1 and dc == 1:
+        direction = "diagonal_up"
+    elif dr == 1 and dc == -1:
+        direction = "diagonal_down_rev"
+    elif dr == -1 and dc == -1:
+        direction = "diagonal_up_rev"
+    else:
+        direction = "unknown"
+    return {
+        "word": word,
+        "start": (row, col),
+        "direction": direction,
+        "length": len(word),
+    }
+
+
 class WordSearch(object):
     def __init__(self, title, words, size, basic=True):
         self.title = title
@@ -135,6 +164,15 @@ class WordSearch(object):
         for solution in self.solution:
             print(f"\t{solution}")
         return
+
+    def get_highlights(self):
+        """Return solution highlights in the expected format for PDF rendering."""
+        highlights = []
+        for entry in self.solution:
+            for word, pos_str in entry.items():
+                highlights.append(parse_solution_entry(word, pos_str))
+        return highlights
+
 
 def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False):
     wordsearch = WordSearch(title, words, size, basic)

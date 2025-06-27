@@ -11,6 +11,10 @@ sys.path.insert(
 
 from wordsearch import generate
 from wordsearch import docx_export
+from wordsearch import pdf_render
+
+docx = False
+pdf = True
 
 # Configure logging
 logging.basicConfig(
@@ -33,21 +37,6 @@ if __name__ == "__main__":
         help="only basic directions: left to right, top to bottom, diagonal from top left to bottom right",
     )
     args = parser.parse_args()
-
-    # [TO DO]: handle output folder
-    # output folder
-    #    if args.output is None:
-    #        args.output = os.path.join(
-    #            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    #            "test",
-    #            "output",
-    #        )
-    #    if not os.path.exists(args.output):
-    #        try:
-    #            os.makedirs(args.output)
-    #        except Exception as e:
-    #            logging.error(f"Failed to create output directory: {e}")
-    #            exit(1)
 
     # get input file data
     input_file = os.path.join(os.getcwd(), args.input)
@@ -73,15 +62,38 @@ if __name__ == "__main__":
             args.basic,
             verbose=True,
         )
-        # Save DOCX with grid and solution
-        output_docx = f"{item['title'].lower().replace(' ', '_')}_wordsearch.docx"
+
+        if puzzle is None:
+            logging.error(f"Failed to generate puzzle for {item['title']}")
+            continue
+
         if args.output:
-            output_docx = os.path.join(args.output, output_docx)
-            # Assuming generate_puzzle returns a WordSearch object with .grid, .words, and .solution attributes
-            docx_export.save_wordsearch_to_docx(
-                output_docx,
-                item["title"],
-                puzzle.grid,
-                puzzle.words,
-                puzzle.solution
-            )
+
+            if docx:
+                # Save DOCX with grid and solution
+                output_docx = (
+                    f"{item['title'].lower().replace(' ', '_')}_wordsearch.docx"
+                )
+                output_docx = os.path.join(args.output, output_docx)
+                docx_export.save_wordsearch_to_docx(
+                    output_docx,
+                    item["title"],
+                    puzzle.grid,
+                    puzzle.words,
+                    puzzle.solution,
+                )
+
+            if pdf:
+                # Get highlights for the solution
+                highlights = puzzle.get_highlights()
+
+                # Save PDF with grid and solution
+                output_pdf = f"{item['title'].lower().replace(' ', '_')}_wordsearch.pdf"
+                output_pdf = os.path.join(args.output, output_pdf)
+                pdf_render.render_wordsearch_pdf(
+                    output_pdf,
+                    item["title"],
+                    puzzle.grid,
+                    puzzle.words,
+                    highlights=highlights,
+                )
