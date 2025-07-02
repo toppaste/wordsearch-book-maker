@@ -1,0 +1,15 @@
+{
+    "puzzles": [
+        {
+            "title": "Colors",
+            "words": [ 
+                "red",  "blue", "green",
+                "yellow", "purple", "orange",
+                "pink", "brown", "black",
+                "white",  "gray", "cyan", 
+                "magenta", "teal", "violet"
+            ],
+            "size": 16
+        }
+    ]
+}

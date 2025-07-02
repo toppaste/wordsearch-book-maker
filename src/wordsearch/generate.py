@@ -45,7 +45,7 @@ def parse_solution_entry(word, pos_str):
         direction = Direction.UNKNOWN
     return {
         "word": word,
-        "start": (row, col),
+        "start": (col, row),
         "direction": direction.name.lower(),
         "length": len(word),
     }
@@ -84,8 +84,8 @@ class WordSearch(object):
 
     def place_word_in_grid_basic(self, word):
         directions = [
-            (0, 1),  # horizontal
-            (1, 0),  # vertical
+            (1, 0),  # horizontal
+            (0, 1),  # vertical
             (1, 1),  # diagonal
         ]
         return self._find_best_position(word, directions)
@@ -179,7 +179,8 @@ class WordSearch(object):
             start = entry["start"]
             direction = entry["direction"]
             length = entry["length"]
-            print(f"\tWord: {word}, Start: {start}, Direction: {direction}, Length: {length}")
+            arrow = direction_to_arrow(direction)
+            print(f"\tWord: {word}, Start: {start}, Direction: {arrow}, Length: {length}")
         return
 
     def get_highlights(self):
@@ -192,7 +193,6 @@ class WordSearch(object):
 
 
 def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False):
-    wordsearch = WordSearch(title, words, size, basic)
     try:
         wordsearch = WordSearch(title, words, size, basic)
     except ValueError as ve:
@@ -205,6 +205,28 @@ def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False)
         wordsearch.show_solution()
 
     return wordsearch
+
+
+def direction_to_arrow(direction):
+    arrows = {
+        "horizontal_left_to_right": "\u2192",   # →
+        "horizontal_right_to_left": "\u2190",   # ←
+        "vertical_up_to_down": "\u2193",        # ↓
+        "vertical_down_to_up": "\u2191",        # ↑
+        "diagonal_up_left_to_down_right": "\u2198",  # ↘
+        "diagonal_down_right_to_up_left": "\u2196",  # ↖
+        "diagonal_up_right_to_down_left": "\u2199",  # ↙
+        "diagonal_down_left_to_up_right": "\u2197",  # ↗
+        "horizontal": "\u2192",
+        "horizontal_rev": "\u2190",
+        "vertical": "\u2193",
+        "vertical_rev": "\u2191",
+        "diagonal_down": "\u2198",
+        "diagonal_up": "\u2197",
+        "diagonal_down_rev": "\u2199",
+        "diagonal_up_rev": "\u2196",
+    }
+    return arrows.get(direction, "?")
 
 
 if __name__ == "__main__":
@@ -222,4 +244,4 @@ if __name__ == "__main__":
     size = 12
     basic = True
 
-    generate_puzzle(title, words, size, basic, verbose=True)
+    generate_puzzle(title, words, size, basic=False, verbose=True)

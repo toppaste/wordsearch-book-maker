@@ -1,0 +1,9 @@
+{
+    "puzzles": [
+        {
+            "title": "Pets",
+            "words": [ "dog", "cat", "fish", "bird", "hamster", "rabbit", "turtle", "parrot", "canary", "goldfish" ],
+            "size": 16
+        }
+    ]
+}

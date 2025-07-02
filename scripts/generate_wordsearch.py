@@ -97,10 +97,14 @@ if __name__ == "__main__":
                 # Save PDF with grid and solution
                 output_pdf = f"{item['title'].lower().replace(' ', '_')}_wordsearch.pdf"
                 output_pdf = os.path.join(args.output, output_pdf)
+                solution_output_pdf = f"{item['title'].lower().replace(' ', '_')}_wordsearch_solution.pdf"
+                solution_output_pdf = os.path.join(args.output, solution_output_pdf)
+
                 pdf_render.render_wordsearch_pdf(
                     output_pdf,
                     item["title"],
                     puzzle.grid,
                     puzzle.words,
                     highlights=highlights,
+                    solution_output_path=solution_output_pdf
                 )
