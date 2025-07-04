@@ -38,7 +38,7 @@ def render_wordsearch_pdf(
     cell_size = min(available_width, available_height) / grid_size
     grid_height = cell_size * grid_size
     # Add enough space for the grid and a little extra
-    elements.append(Spacer(1, grid_height + 48))
+    elements.append(Spacer(1, grid_height + 40))
 
     # Prepare word list in multiple columns, uppercase
     num_columns = 3
@@ -55,7 +55,7 @@ def render_wordsearch_pdf(
                 row.append("")
         word_table_data.append(row)
     # Set column widths to spread the table across the page
-    col_width = (page_width - 2 * margin) / num_columns
+    col_width = (page_width - 4 * margin) / num_columns
     word_table = Table(word_table_data, colWidths=[col_width]*num_columns, hAlign='CENTER')
     word_table.setStyle(TableStyle([
         ("ALIGN", (0, 0), (-1, -1), "CENTER"),  # Center text in each cell
@@ -120,9 +120,12 @@ def render_wordsearch_pdf(
             # Draw highlights if provided
             if highlights:
                 for h in highlights:
-                    start_r, start_c = h["start"]
-                    dr, dc = direction_to_delta(h["direction"])
+                    print(f"Highlight: {h}")
+                    start_c, start_r = h["start"]
+                    dc, dr = direction_to_delta(h["direction"])
+                    print(f"Direction: {h['direction']} ({dr}, {dc})")
                     for i in range(h["length"]):
+                        print(f"Drawing highlight at: {start_r + dr * i}, {start_c + dc * i}")
                         rr = start_r + dr * i
                         cc = start_c + dc * i
                         x = margin_x + cc * cell_size
@@ -142,13 +145,13 @@ def render_wordsearch_pdf(
 def direction_to_delta(direction):
     # Map direction string to (dr, dc)
     mapping = {
-        "horizontal": (0, 1),
-        "horizontal_rev": (0, -1),
-        "vertical": (1, 0),
-        "vertical_rev": (-1, 0),
-        "diagonal_down": (1, 1),
-        "diagonal_up": (-1, 1),
-        "diagonal_down_rev": (1, -1),
-        "diagonal_up_rev": (-1, -1),
+        "horizontal_left_to_right":       (  1,  0 ),  # →
+        "horizontal_right_to_left":       ( -1,  0 ),  # ←
+        "vertical_up_to_down":            (  0,  1 ),  # ↓
+        "vertical_down_to_up":            (  0, -1 ),  # ↑
+        "diagonal_up_left_to_down_right": (  1,  1 ),  # ↘
+        "diagonal_down_right_to_up_left": ( -1, -1 ),  # ↖
+        "diagonal_up_right_to_down_left": ( -1,  1 ),  # ↙
+        "diagonal_down_left_to_up_right": (  1, -1 ),  # ↗
     }
     return mapping.get(direction, (0, 1))
