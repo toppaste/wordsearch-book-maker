@@ -8,8 +8,9 @@ A Python project for generating word search books.
 - [x] Save puzzle to docx
 - [x] Save puzzle to pdf
 - [x] Improve formatting of main page
-- [ ] Fix solution page
-- [ ]Improve formatting of solution page
+- [x] Fix solution page
+- [ ] Improve formatting of solution page (rectangles)
+- [ ] Evaluate best grid size and word number foir book
 - [ ] Print collection in a book
 - ...
 

@@ -3,14 +3,13 @@
         {
             "title": "Colors",
             "words": [ 
-                "red",  "blue", "green",
-                "yellow", "purple", "orange",
-                "pink", "brown", "black",
-                "white",  "gray", "cyan", 
-                "magenta", "teal", "violet",
-                "indigo", "maroon", "navy"
+                "red",  "blue", "green", "yellow",
+                "purple", "orange", "pink", "brown",
+                "black", "white",  "gray", "cyan", 
+                "magenta", "teal", "violet", "indigo",
+                "maroon", "navy", "olive", "lime"
             ],
-            "size": 16
+            "size": 12
         }
     ]
 }

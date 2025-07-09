@@ -49,7 +49,7 @@ def render_wordsearch_pdf(
     elements.append(Spacer(1, grid_height + 40))
 
     # Prepare word list in multiple columns, uppercase
-    num_columns = 3
+    num_columns = 4
     words_upper = [w.upper() for w in word_list]
     rows = (len(words_upper) + num_columns - 1) // num_columns
     word_table_data = []
