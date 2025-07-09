@@ -89,6 +89,7 @@ if __name__ == "__main__":
                     puzzle.words,
                     puzzle.solution,
                 )
+                print(f"DOCX file generated: {output_docx}")
 
             if args.pdf:
                 # Get highlights for the solution
@@ -106,5 +107,8 @@ if __name__ == "__main__":
                     puzzle.grid,
                     puzzle.words,
                     highlights=highlights,
-                    solution_output_path=solution_output_pdf
+                    solution_output_path=solution_output_pdf,
+                    highlight_style="rect"
                 )
+                print(f"PDF file generated: {output_pdf}")
+                print(f"Solution PDF file generated: {solution_output_pdf}")

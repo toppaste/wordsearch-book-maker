@@ -19,6 +19,7 @@ def render_wordsearch_pdf(
     word_list,
     highlights=None,
     solution_output_path=None,
+    highlight_style="rect",  # Add this parameter: "rect" or "fill"
 ):
     styles = getSampleStyleSheet()
 
@@ -160,13 +161,38 @@ def render_wordsearch_pdf(
                 for h in highlights:
                     start_c, start_r = h["start"]
                     dc, dr = direction_to_delta(h["direction"])
-                    for i in range(h["length"]):
-                        rr = start_r + dr * i
-                        cc = start_c + dc * i
-                        x = start_x + cc * cell_size
-                        y = start_y - rr * cell_size - cell_size
-                        canvas.setFillColorRGB(1, 1, 0, alpha=0.3)  # Yellow highlight
-                        canvas.rect(x, y, cell_size, cell_size, fill=1, stroke=0)
+                    length = h["length"]
+
+                    # Calculate the rectangle's start and end positions
+                    end_r = start_r + dr * (length - 1)
+                    end_c = start_c + dc * (length - 1)
+
+                    # Find top-left and bottom-right corners (regardless of direction)
+                    min_r = min(start_r, end_r)
+                    max_r = max(start_r, end_r)
+                    min_c = min(start_c, end_c)
+                    max_c = max(start_c, end_c)
+
+                    x = start_x + min_c * cell_size
+                    y = start_y - min_r * cell_size
+                    width = (abs(max_c - min_c) + 1) * cell_size
+                    height = (abs(max_r - min_r) + 1) * cell_size
+
+                    if highlight_style == "fill":
+                        # Yellow highlight fill for each letter (legacy)
+                        for i in range(length):
+                            rr = start_r + dr * i
+                            cc = start_c + dc * i
+                            lx = start_x + cc * cell_size
+                            ly = start_y - rr * cell_size - cell_size
+                            canvas.setFillColorRGB(1, 1, 0, alpha=0.3)
+                            canvas.rect(lx, ly, cell_size, cell_size, fill=1, stroke=0)
+                    elif highlight_style == "rect":
+                        # Draw one rounded rectangle covering the whole word
+                        canvas.setStrokeColorRGB(1, 0.6, 0)  # Orange border
+                        canvas.setLineWidth(2)
+                        radius = cell_size * 0.35
+                        canvas.roundRect(x, y-height, width, height, radius, fill=0, stroke=1)
 
             elements_sol.append(Spacer(1, grid_height + 36))  # Space after grid if needed
 

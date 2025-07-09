@@ -203,6 +203,7 @@ def generate_puzzle(title, words, size, basic, export_docx=False, verbose=False)
     if verbose:
         wordsearch.show_grid()
         wordsearch.show_solution()
+        print()  # Add an empty line after the grid and solution
 
     return wordsearch
 

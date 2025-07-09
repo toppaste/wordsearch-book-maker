@@ -9,7 +9,7 @@ A Python project for generating word search books.
 - [x] Save puzzle to pdf
 - [x] Improve formatting of main page
 - [x] Fix solution page
-- [ ] Improve formatting of solution page (rectangles)
+- [ ] Improve formatting of solution page (rectangles vs fill)
 - [ ] Evaluate best grid size and word number foir book
 - [ ] Print collection in a book
 - ...
