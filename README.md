@@ -9,8 +9,8 @@ A Python project for generating word search books.
 - [x] Save puzzle to pdf
 - [x] Improve formatting of main page
 - [x] Fix solution page
-- [ ] Improve formatting of solution page (rectangles vs fill)
-- [ ] Evaluate best grid size and word number foir book
+- [x] Improve formatting of solution page (rectangles vs fill)
+- [ ] Evaluate best grid size and word number for book
 - [ ] Print collection in a book
 - ...
 
@@ -41,6 +41,14 @@ To generate a wordsearch from a JSON file:
 
 ```bash
 python -m scripts.generate_wordsearch input.json
+```
+
+### Test
+
+To run test:
+
+```bash
+python -m pytest [-s] [-v] tests/
 ```
 
 ## Project Structure

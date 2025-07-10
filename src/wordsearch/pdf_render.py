@@ -10,6 +10,7 @@ from reportlab.platypus import (
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas as pdf_canvas
+import math
 
 
 def render_wordsearch_pdf(
@@ -132,7 +133,7 @@ def render_wordsearch_pdf(
             available_height = (page_height - 2 * page_margin - 100) * 0.45
             cell_size = min(available_width, available_height) / grid_size
             grid_width = cell_size * grid_size
-            grid_height = cell_size * grid_size
+            grid_height = cell_size * cell_size
 
             grid_gap_y = 72  # delta from the top of the page to the grid
             start_x = (page_width - grid_width) / 2
@@ -175,8 +176,8 @@ def render_wordsearch_pdf(
 
                     x = start_x + min_c * cell_size
                     y = start_y - min_r * cell_size
-                    width = (abs(max_c - min_c) + 1) * cell_size
-                    height = (abs(max_r - min_r) + 1) * cell_size
+                    # width = (abs(max_c - min_c) + 1) * cell_size
+                    # height = (abs(max_r - min_r) + 1) * cell_size
 
                     if highlight_style == "fill":
                         # Yellow highlight fill for each letter (legacy)
@@ -188,13 +189,38 @@ def render_wordsearch_pdf(
                             canvas.setFillColorRGB(1, 1, 0, alpha=0.3)
                             canvas.rect(lx, ly, cell_size, cell_size, fill=1, stroke=0)
                     elif highlight_style == "rect":
-                        # Draw one rounded rectangle covering the whole word
-                        canvas.setStrokeColorRGB(1, 0.6, 0)  # Orange border
-                        canvas.setLineWidth(2)
-                        radius = cell_size * 0.35
-                        canvas.roundRect(x, y-height, width, height, radius, fill=0, stroke=1)
+                        # Compute rectangle parameters
+                        if dr == 0:  # Horizontal
+                            rect_width = cell_size * length
+                            rect_height = cell_size * 0.6
+                            angle = 0
+                        elif dc == 0:  # Vertical
+                            rect_width = cell_size * 0.6
+                            rect_height = cell_size * length
+                            angle = 0
+                        else:  # Diagonal
+                            rect_width = (cell_size * length * 1.42) - (cell_size * 0.4)  # Approximate diagonal length
+                            rect_height = cell_size * 0.6
+                            # Angle in degrees: atan2(dr, dc)
+                            angle = math.degrees(math.atan2(dr, dc))
 
-            elements_sol.append(Spacer(1, grid_height + 36))  # Space after grid if needed
+                        # Center of the rectangle (middle of the word)
+                        mid_r = start_r + dr * (length - 1) / 2
+                        mid_c = start_c + dc * (length - 1) / 2
+                        center_x = start_x + (mid_c + 0.5) * cell_size
+                        center_y = start_y - (mid_r + 0.5) * cell_size
+
+                        # Draw rotated rounded rectangle
+                        canvas.saveState()
+                        canvas.translate(center_x, center_y)
+                        canvas.rotate(-angle)  # Negative because PDF y-axis is down
+                        canvas.setStrokeColorRGB(1, 0.6, 0)
+                        canvas.setLineWidth(1.5)
+                        radius = cell_size * 0.35
+                        canvas.roundRect(-rect_width/2, -rect_height/2, rect_width, rect_height, radius, fill=0, stroke=1)
+                        canvas.restoreState()
+
+            # elements_sol.append(Spacer(1, grid_height + 24))  # Space after grid if needed
 
             # Draw a horizontal line at the bottom of the grid
             #canvas.setLineWidth(1)
