@@ -33,16 +33,8 @@ if __name__ == "__main__":
         action="store_true",
         help="only basic directions: left to right, top to bottom, diagonal from top left to bottom right",
     )
-    parser.add_argument(
-        "--pdf",
-        action="store_true",
-        help="generate PDF output"
-    )
-    parser.add_argument(
-        "--docx",
-        action="store_true",
-        help="generate DOCX output"
-    )
+    parser.add_argument("--pdf", action="store_true", help="generate PDF output")
+    parser.add_argument("--docx", action="store_true", help="generate DOCX output")
     args = parser.parse_args()
 
     # get input file data
@@ -98,7 +90,9 @@ if __name__ == "__main__":
                 # Save PDF with grid and solution
                 output_pdf = f"{item['title'].lower().replace(' ', '_')}_wordsearch.pdf"
                 output_pdf = os.path.join(args.output, output_pdf)
-                solution_output_pdf = f"{item['title'].lower().replace(' ', '_')}_wordsearch_solution.pdf"
+                solution_output_pdf = (
+                    f"{item['title'].lower().replace(' ', '_')}_wordsearch_solution.pdf"
+                )
                 solution_output_pdf = os.path.join(args.output, solution_output_pdf)
 
                 pdf_render.render_wordsearch_pdf(
@@ -108,7 +102,7 @@ if __name__ == "__main__":
                     puzzle.words,
                     highlights=highlights,
                     solution_output_path=solution_output_pdf,
-                    highlight_style="rect"
+                    highlight_style="rect",
                 )
                 print(f"PDF file generated: {output_pdf}")
                 print(f"Solution PDF file generated: {solution_output_pdf}")

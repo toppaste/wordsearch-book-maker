@@ -10,8 +10,9 @@ A Python project for generating word search books.
 - [x] Improve formatting of main page
 - [x] Fix solution page
 - [x] Improve formatting of solution page (rectangles vs fill)
-- [ ] Evaluate best grid size and word number for book
-- [ ] Print collection in a book
+- [x] Evaluate best grid size and word number for book
+- [x] Print collection in a book, first version
+- [ ] Improve collection book (toc, numbers)
 - ...
 
 ## Installation
