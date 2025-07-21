@@ -40,6 +40,20 @@ def main():
     # Use a temp directory for intermediate PDFs
     with tempfile.TemporaryDirectory() as tmpdir:
         merger = PdfMerger()
+
+        # --- Blank page ---
+        blank_pdf = os.path.join(tmpdir, "blank.pdf")
+        create_blank_page(blank_pdf)
+        merger.append(blank_pdf)
+
+        # --- Title page ---
+        title_pdf = os.path.join(tmpdir, "title.pdf")
+        create_title_page(title_pdf, puzzle_name)
+        merger.append(title_pdf)
+
+        # --- Another blank page ---
+        merger.append(blank_pdf)
+
         # --- Puzzles: one per page ---
         for idx, (title, grid, words) in enumerate(puzzles):
             puzzle_pdf = os.path.join(tmpdir, f"puzzle_{idx}.pdf")
@@ -54,8 +68,12 @@ def main():
             )
             merger.append(puzzle_pdf)
 
+        # --- Solutions title page ---
+        solutions_title_pdf = os.path.join(tmpdir, "solutions_title.pdf")
+        create_title_page(solutions_title_pdf, "Solutions")
+        merger.append(solutions_title_pdf)
+
         # --- Solutions: 4 per page ---
-        # Group solutions in chunks of 4
         for i in range(0, len(solutions), 4):
             chunk = solutions[i : i + 4]
             solution_pdf = os.path.join(tmpdir, f"solution_{i//4}.pdf")
@@ -64,7 +82,7 @@ def main():
 
         # Write the merged PDF
         merger.write(args.output)
-        merger.close()  # <--- Add this line!
+        merger.close()
         print(f"Book PDF generated: {args.output}")
 
 
@@ -94,6 +112,29 @@ def create_solution_page(solutions_chunk, output_pdf):
         from src.wordsearch.pdf_render import draw_solution_grid_for_book
 
         draw_solution_grid_for_book(c, pos_x, pos_y, grid, highlights, cell_size, title)
+    c.showPage()
+    c.save()
+
+
+def create_blank_page(output_pdf):
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+
+    c = canvas.Canvas(output_pdf, pagesize=letter)
+    c.showPage()
+    c.save()
+
+
+def create_title_page(output_pdf, title):
+    from reportlab.lib.pagesizes import letter
+    from reportlab.pdfgen import canvas
+
+    page_width, page_height = letter
+    c = canvas.Canvas(output_pdf, pagesize=letter)
+    c.setFont("Helvetica-Bold", 36)
+
+    upper_title = title.upper().replace("_", " ")
+    c.drawCentredString(page_width / 2, page_height / 2, upper_title)
     c.showPage()
     c.save()
 
